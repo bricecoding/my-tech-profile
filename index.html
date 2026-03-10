@@ -2554,9 +2554,11 @@
           }, 4000);
         })
         .catch(err => {
-          /* ── ERROR — log for debugging, show user-friendly message ── */
+          /* ── ERROR — log full error for debugging ── */
           console.error('EmailJS error:', err);
-          feedback.textContent = '✗  Sending failed. Please email me directly at pascalbngono@gmail.com';
+          // Show the actual status/text so the root cause is visible on screen
+          const detail = err && (err.text || err.status || JSON.stringify(err));
+          feedback.innerHTML = `✗ Sending failed${detail ? ': <strong>' + detail + '</strong>' : ''}. Please email me directly at pascalbngono@gmail.com`;
           feedback.className   = 'form-feedback error';
           btn.disabled  = false;
           btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
