@@ -119,21 +119,31 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--darker);
+      background: #020208;
       color: var(--text);
       overflow-x: hidden;
-      /* Animated tech grid — drifts diagonally for a living data-stream feel */
+      /*
+        Four-layer deep-space background:
+        Layer 1 — distant micro-stars  (sparse, tiny white dots)
+        Layer 2 — closer stars         (denser, slightly larger)
+        Layer 3 — teal vertical grid
+        Layer 4 — teal horizontal grid
+        All four layers drift together so stars + grid move as one universe.
+      */
       background-image:
-        linear-gradient(rgba(0,245,212,.032) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,245,212,.032) 1px, transparent 1px);
-      background-size: 44px 44px;
-      animation: grid-drift 12s linear infinite;
+        radial-gradient(rgba(255,255,255,.55) 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,.28) 1px, transparent 1px),
+        linear-gradient(rgba(0,245,212,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,212,.055) 1px, transparent 1px);
+      background-size: 520px 520px, 290px 290px, 44px 44px, 44px 44px;
+      background-position: 0 0, 140px 70px, 0 0, 0 0;
+      animation: grid-drift 18s linear infinite;
     }
 
-    /* Diagonal grid drift — gives the background a living, tech-dashboard motion */
+    /* All four layers shift together — creates parallax-free star-drift */
     @keyframes grid-drift {
-      0%   { background-position: 0 0,    0 0;         }
-      100% { background-position: 44px 44px, 44px 44px; }
+      0%   { background-position: 0 0,        140px 70px,  0 0,        0 0;        }
+      100% { background-position: 44px 44px,  184px 114px, 44px 44px,  44px 44px; }
     }
 
 
@@ -158,7 +168,7 @@
       inset: 0;
       pointer-events: none; /* never captures clicks */
       z-index: 0;
-      opacity: 0.5;
+      opacity: 0.72;
     }
 
 
@@ -188,38 +198,52 @@
       position: fixed;
       border-radius: 50%;
       pointer-events: none;
-      filter: blur(90px);
+      filter: blur(100px);
       z-index: 0;
     }
+    /* Teal nebula — top-left */
     .bg-blob-1 {
-      width: 650px; height: 650px;
-      background: radial-gradient(circle, rgba(0,245,212,.06), transparent 70%);
-      top: -15%; left: -10%;
-      animation: blob-drift-1 20s ease-in-out infinite alternate;
+      width: 860px; height: 860px;
+      background: radial-gradient(circle, rgba(0,245,212,.20), transparent 65%);
+      top: -20%; left: -14%;
+      animation: blob-drift-1 22s ease-in-out infinite alternate;
     }
+    /* Purple nebula — bottom-right */
     .bg-blob-2 {
-      width: 550px; height: 550px;
-      background: radial-gradient(circle, rgba(114,9,183,.07), transparent 70%);
-      bottom: -12%; right: -8%;
-      animation: blob-drift-2 25s ease-in-out infinite alternate;
+      width: 720px; height: 720px;
+      background: radial-gradient(circle, rgba(114,9,183,.26), transparent 65%);
+      bottom: -18%; right: -12%;
+      animation: blob-drift-2 28s ease-in-out infinite alternate;
     }
+    /* Blue nebula — centre */
     .bg-blob-3 {
-      width: 420px; height: 420px;
-      background: radial-gradient(circle, rgba(72,149,239,.05), transparent 70%);
-      top: 45%; left: 42%;
-      animation: blob-drift-3 18s ease-in-out infinite alternate;
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(72,149,239,.16), transparent 65%);
+      top: 38%; left: 38%;
+      animation: blob-drift-3 20s ease-in-out infinite alternate;
+    }
+    /* Pink/accent nebula — upper-right */
+    .bg-blob-4 {
+      width: 460px; height: 460px;
+      background: radial-gradient(circle, rgba(247,37,133,.14), transparent 65%);
+      top: 6%; right: 4%;
+      animation: blob-drift-4 24s ease-in-out infinite alternate;
     }
     @keyframes blob-drift-1 {
-      from { transform: translate(0, 0)         scale(1);    }
-      to   { transform: translate(8vw, 6vh)     scale(1.18); }
+      from { transform: translate(0, 0)       scale(1);    }
+      to   { transform: translate(9vw, 7vh)   scale(1.20); }
     }
     @keyframes blob-drift-2 {
-      from { transform: translate(0, 0)          scale(1);    }
-      to   { transform: translate(-6vw, -8vh)    scale(1.12); }
+      from { transform: translate(0, 0)        scale(1);    }
+      to   { transform: translate(-7vw, -9vh)  scale(1.15); }
     }
     @keyframes blob-drift-3 {
-      from { transform: translate(0, 0)         scale(1);   }
-      to   { transform: translate(-5vw, 5vh)    scale(.88); }
+      from { transform: translate(0, 0)       scale(1);   }
+      to   { transform: translate(-6vw, 6vh)  scale(.85); }
+    }
+    @keyframes blob-drift-4 {
+      from { transform: translate(0, 0)       scale(1);    }
+      to   { transform: translate(-5vw, 8vh)  scale(1.18); }
     }
 
 
@@ -903,10 +927,9 @@
     .certs { background: var(--dark); }
 
     .certs-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
     }
 
     .cert-card {
@@ -914,8 +937,6 @@
       border: 1px solid var(--border);
       border-radius: 1.4rem;
       overflow: hidden;
-      max-width: 560px;
-      width: 100%;
       transition: border-color var(--t), transform var(--t), box-shadow var(--t);
     }
     .cert-card:hover {
@@ -1335,10 +1356,11 @@
        ════════════════════════════════ -->
   <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
-  <!-- Ambient drifting glow blobs — purely decorative, sit behind the particle layer -->
+  <!-- Ambient drifting nebula blobs — purely decorative, sit behind the particle layer -->
   <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
   <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
   <div class="bg-blob bg-blob-3" aria-hidden="true"></div>
+  <div class="bg-blob bg-blob-4" aria-hidden="true"></div>
 
   <!-- Cursor glow div — moved by JS mousemove handler -->
   <div id="cursor-glow" aria-hidden="true"></div>
@@ -2105,20 +2127,119 @@
         <!-- Certificate: Cybersecurity -->
         <div class="cert-card">
           <div class="cert-img-wrap">
-            <img src="pic/cybersec%20certificate.png"
-                 alt="Cybersecurity Certificate"
-                 class="cert-img"
-                 loading="lazy" />
+            <img src="pic/cybersec%20certificate.png" alt="Cybersecurity Certificate" class="cert-img" loading="lazy" />
           </div>
           <div class="cert-body">
             <h3 class="cert-title">Cybersecurity Certificate</h3>
-            <p class="cert-meta">
-              <i class="fa-solid fa-building-shield" style="color:var(--primary);margin-right:.4rem"></i>
-              Pascal Ngono &nbsp;&bull;&nbsp; Cybersecurity Professional
-            </p>
+            <p class="cert-meta"><i class="fa-solid fa-building-shield" style="color:var(--primary);margin-right:.4rem"></i>Cybersecurity Professional</p>
             <div class="cert-tags">
               <span class="project-tag tag-cyber">Cybersecurity</span>
               <span class="project-tag tag-cyber">Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: GRC -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/GRC%20Certificate.png" alt="GRC Certificate" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">GRC Certificate</h3>
+            <p class="cert-meta"><i class="fa-solid fa-scale-balanced" style="color:#c77dff;margin-right:.4rem"></i>Governance, Risk &amp; Compliance</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-cyber">GRC</span>
+              <span class="project-tag tag-cyber">ISO 27001</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Docker -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/docker%20certificate.png" alt="Docker Certificate" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Docker Certificate</h3>
+            <p class="cert-meta"><i class="fa-brands fa-docker" style="color:var(--primary);margin-right:.4rem"></i>Container Fundamentals</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-devops">DevOps</span>
+              <span class="project-tag tag-devops">Containers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Kubernetes -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/kubernetes%20certification.png" alt="Kubernetes Certification" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Kubernetes Certification</h3>
+            <p class="cert-meta"><i class="fa-solid fa-dharmachakra" style="color:var(--blue);margin-right:.4rem"></i>Container Orchestration</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-devops">DevOps</span>
+              <span class="project-tag tag-cloud">Orchestration</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Terraform -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/terraform%20certification.png" alt="Terraform Certification" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Terraform Certification</h3>
+            <p class="cert-meta"><i class="fa-solid fa-cube" style="color:#7b2fff;margin-right:.4rem"></i>Infrastructure as Code</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-devops">IaC</span>
+              <span class="project-tag tag-cloud">Cloud</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Data Analytics -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/data%20analytics%20certificate.png" alt="Data Analytics Certificate" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Data Analytics Certificate</h3>
+            <p class="cert-meta"><i class="fa-solid fa-chart-line" style="color:#fb8500;margin-right:.4rem"></i>Data Analysis &amp; Insights</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-cloud">Data Analytics</span>
+              <span class="project-tag tag-cloud">Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Career Essentials in Generative AI — Microsoft & LinkedIn -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/career%20Essentials%20in%20Gen%20AI%20Microsoft%20and%20LinkedIn.png" alt="Career Essentials in Generative AI" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Career Essentials in Generative AI</h3>
+            <p class="cert-meta"><i class="fa-solid fa-brain" style="color:var(--primary);margin-right:.4rem"></i>Microsoft &amp; LinkedIn Learning</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-cloud">AI</span>
+              <span class="project-tag tag-cloud">Microsoft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate: Google IT Support -->
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <img src="pic/Google%20IT%20Support%20Certificate.png" alt="Google IT Support Certificate" class="cert-img" loading="lazy" />
+          </div>
+          <div class="cert-body">
+            <h3 class="cert-title">Google IT Support Certificate</h3>
+            <p class="cert-meta"><i class="fa-brands fa-google" style="color:#fb8500;margin-right:.4rem"></i>Google Career Certificates</p>
+            <div class="cert-tags">
+              <span class="project-tag tag-devops">IT Support</span>
+              <span class="project-tag tag-devops">Google</span>
             </div>
           </div>
         </div>
@@ -2358,12 +2479,26 @@
 
       let W, H, particles;
 
-      // ── Constants ──
-      const COUNT           = 120;  // total number of particles
-      const CONNECTION_DIST = 140;  // pixels — max distance for drawing a line
-      const MAX_SPEED       = 0.5;  // pixels per frame
+      // ── Colour palette — teal / purple / blue / white ──
+      // weight = probability share out of 100
+      const PALETTE = [
+        { r: 0,   g: 245, b: 212, weight: 48 }, // teal  (primary)
+        { r: 148, g: 18,  b: 255, weight: 22 }, // violet
+        { r: 72,  g: 149, b: 239, weight: 20 }, // blue
+        { r: 255, g: 255, b: 255, weight: 10 }, // white star
+      ];
 
-      /** Resize canvas to fill the viewport */
+      const COUNT           = 165;
+      const CONNECTION_DIST = 135;
+
+      /** Pick a colour from the weighted palette */
+      function pickColor() {
+        const rnd = Math.random() * 100;
+        let cum = 0;
+        for (const c of PALETTE) { cum += c.weight; if (rnd < cum) return c; }
+        return PALETTE[0];
+      }
+
       function resize() {
         W = canvas.width  = window.innerWidth;
         H = canvas.height = window.innerHeight;
@@ -2371,73 +2506,94 @@
 
       /**
        * Create all particle objects.
-       * Each has: position (x,y), velocity (dx,dy),
-       *           radius (r), and opacity (alpha).
+       * isStar = true  → tiny, fast-twinkle, NO connection lines  (deep background)
+       * isStar = false → larger node, slow-twinkle, draws lines    (network layer)
        */
       function initParticles() {
-        particles = Array.from({ length: COUNT }, () => ({
-          x     : Math.random() * W,
-          y     : Math.random() * H,
-          r     : Math.random() * 1.8 + 0.4,
-          dx    : (Math.random() - 0.5) * MAX_SPEED,
-          dy    : (Math.random() - 0.5) * MAX_SPEED,
-          alpha : Math.random() * 0.5 + 0.15
-        }));
+        particles = Array.from({ length: COUNT }, () => {
+          const color  = pickColor();
+          const isStar = Math.random() < 0.32;
+          const aMax   = isStar
+            ? Math.random() * 0.55 + 0.35
+            : Math.random() * 0.45 + 0.55;
+          return {
+            x          : Math.random() * W,
+            y          : Math.random() * H,
+            r          : isStar ? Math.random() * 0.65 + 0.15 : Math.random() * 1.9 + 0.65,
+            dx         : (Math.random() - 0.5) * (isStar ? 0.14 : 0.38),
+            dy         : (Math.random() - 0.5) * (isStar ? 0.14 : 0.38),
+            alpha      : Math.random() * (aMax - 0.1) + 0.1,
+            alphaMin   : isStar ? 0.05 : 0.15,
+            alphaMax   : aMax,
+            twinkleSpd : isStar
+              ? Math.random() * 0.022 + 0.008   // stars twinkle faster
+              : Math.random() * 0.008 + 0.002,  // nodes breathe slowly
+            twinkleDir : Math.random() < 0.5 ? 1 : -1,
+            cr: color.r, cg: color.g, cb: color.b,
+            isStar,
+          };
+        });
       }
 
       /**
-       * Main animation loop.
-       * Called recursively via requestAnimationFrame (~60 fps).
+       * Main animation loop — ~60 fps via rAF.
+       * Order: clear → draw particles (with glow on nodes) → draw connection lines.
        */
       function draw() {
         ctx.clearRect(0, 0, W, H);
 
-        // ── Draw and move every particle ──
+        // ── 1. Draw & animate every particle ──
         for (const p of particles) {
-          // Draw dot
+          // Twinkle: oscillate alpha between alphaMin and alphaMax
+          p.alpha += p.twinkleSpd * p.twinkleDir;
+          if (p.alpha >= p.alphaMax) { p.alpha = p.alphaMax; p.twinkleDir = -1; }
+          if (p.alpha <= p.alphaMin) { p.alpha = p.alphaMin; p.twinkleDir =  1; }
+
+          // Node particles get a soft glow halo
+          if (!p.isStar) {
+            ctx.shadowBlur  = 14;
+            ctx.shadowColor = `rgba(${p.cr},${p.cg},${p.cb},0.85)`;
+          }
+
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0,245,212,${p.alpha})`;
+          ctx.fillStyle = `rgba(${p.cr},${p.cg},${p.cb},${p.alpha})`;
           ctx.fill();
+          ctx.shadowBlur = 0; // reset so lines aren't glowing
 
-          // Move
-          p.x += p.dx;
-          p.y += p.dy;
-
-          // Bounce off viewport edges
+          p.x += p.dx;  p.y += p.dy;
           if (p.x < 0 || p.x > W) p.dx *= -1;
           if (p.y < 0 || p.y > H) p.dy *= -1;
         }
 
-        // ── Draw connection lines between nearby pairs ──
+        // ── 2. Draw connection lines between nearby NODE particles only ──
         for (let i = 0; i < particles.length; i++) {
+          if (particles[i].isStar) continue;
           for (let j = i + 1; j < particles.length; j++) {
-            const dx   = particles[i].x - particles[j].x;
-            const dy   = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
+            if (particles[j].isStar) continue;
+            const ddx  = particles[i].x - particles[j].x;
+            const ddy  = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(ddx * ddx + ddy * ddy);
             if (dist < CONNECTION_DIST) {
-              // Fade line opacity with distance
-              const opacity = 0.18 * (1 - dist / CONNECTION_DIST);
+              const t       = 1 - dist / CONNECTION_DIST;
+              const opacity = 0.26 * t;
+              const p1      = particles[i];
               ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.moveTo(p1.x, p1.y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(0,245,212,${opacity})`;
-              ctx.lineWidth   = 0.6;
+              ctx.strokeStyle = `rgba(${p1.cr},${p1.cg},${p1.cb},${opacity})`;
+              ctx.lineWidth   = 0.4 + t * 0.45;
               ctx.stroke();
             }
           }
         }
 
-        requestAnimationFrame(draw); // schedule next frame
+        requestAnimationFrame(draw);
       }
 
-      // Bootstrap
       resize();
       initParticles();
       draw();
-
-      // Re-initialise on window resize to fill new dimensions
       window.addEventListener('resize', () => { resize(); initParticles(); });
 
     })(); // end ParticleSystem
